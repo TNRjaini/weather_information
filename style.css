@@ -1,0 +1,65 @@
+body {
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-image:url("jk.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    text-align: center;
+    
+  }
+  
+  form {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  input[type="text"] {
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+  
+  .weather-info {
+    text-align: center;
+  }
+  
+  .weather-info .location {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .weather-info .temperature {
+    font-size: 50px;
+  }
+  
+  .weather-info .description {
+    font-size: 20px;
+  }
+  
+  .weather-info .icon {
+    margin-top: 10px;
+  }
+  
+  .weather-info .icon img {
+    width: 100px;
+  }
+  .weather-info{
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 100px;
+    background-color: rgba(255, 255, 255, 0.589);
+  }
