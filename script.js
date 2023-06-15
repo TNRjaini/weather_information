@@ -4,10 +4,8 @@ const weatherInfo = document.querySelector('.weather-info');
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  const location = locationInput.value;
-  fetchWeatherData(location);
-  saveData(location);
-  showdata(location)
+  const locationData = locationInput.value;
+  fetchWeatherData(locationData);
 });
 
 function fetchWeatherData(location) {
@@ -17,7 +15,6 @@ function fetchWeatherData(location) {
   fetch(weatherUrl)
     .then(response => response.json())
     .then(data => {
-      updateWeatherData(data);
       saveData(location, data);
     })
     .catch(error => {
@@ -26,41 +23,110 @@ function fetchWeatherData(location) {
 }
 
 function updateWeatherData(data) {
-  const locationElement = weatherInfo.querySelector('.location');
-  const temperatureElement = weatherInfo.querySelector('.temperature');
-  const descriptionElement = weatherInfo.querySelector('.description');
-  const iconElement = weatherInfo.querySelector('.icon img');
+  let dataOfArray = data;
+  let weatherInfo = document.getElementById("weatherInfo");
+  dataOfArray.map((item) => {
+    let divContainer = document.createElement("div");
+    const locationName = item.data.name;
+    const temperatureMet = Math.round(item.data.main.temp - 273.15);
+    const descriptionDetails = item.data.weather[0].description;
+    const iconCode = item.data.weather[0].icon;
+    const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
+    
+    
+    let location = document.createElement("div");
+    let temperature = document.createElement("div");
+    let description = document.createElement("div");
+    let time = document.createElement("p");
+    
+    let icon = document.createElement("div");
+    icon.className = "icon";
+    let image = document.createElement("img")
+    image.src = iconUrl;
+    icon.appendChild(image);
+    
+    divContainer.className = "box";
+    location.className = "location";
+    description.className = "description";
+    temperature.className = "temperature";
+    location.innerHTML = locationName;
+    temperature.innerHTML = temperatureMet;
+    description.innerHTML = descriptionDetails;
+    time.innerHTML = item.time;
 
-  const location = data.name;
+    divContainer.appendChild(location);
+    divContainer.appendChild(description);
+    divContainer.appendChild(temperature);
+    divContainer.appendChild(icon);
+    divContainer.appendChild(time);
 
-  // Convert temperature to Celsius
-  const temperature = Math.round(data.main.temp - 273.15);
-  const description = data.weather[0].description;
-  const iconCode = data.weather[0].icon;
-  const iconUrl = `https://openweathermap.org/img/w/${iconCode}.png`;
-
-  locationElement.textContent = location;
-  temperatureElement.textContent = temperature + '°C';
-  descriptionElement.textContent = description;
-  iconElement.src = iconUrl;
-
+    weatherInfo.appendChild(divContainer);
+  });
 }
-    //savedata
-function saveData(location, data) {
-  const weatherData = {
-    location: location,
-    data: data
-  };
-  localStorage.setItem('weatherData', JSON.stringify(weatherData));
+//savedata
+function saveData(locationData, data) {
+  const storedData = localStorage.getItem('weatherData');  
+  if(storedData){
+    if(JSON.parse(storedData).length > 0){
+      if(JSON.parse(storedData).length > 10){
+        let weatherData = {
+          location: locationData,
+          data: data,
+          time: new Date()
+        };
+        let historyArray = JSON.parse(storedData);
+        historyArray.push(weatherData);
+        let newHistoryArray = historyArray.slice(1);
+        localStorage.setItem('weatherData', JSON.stringify(newHistoryArray));
+        updateWeatherData(newHistoryArray.reverse());
+        location.reload();
+      }
+      else {
+        let weatherData = {
+          location: locationData,
+          data: data,
+          time: new Date()
+        };
+        let historyArray = JSON.parse(storedData);
+        console.log(historyArray);
+        historyArray.push(weatherData);
+        localStorage.setItem('weatherData', JSON.stringify(historyArray));
+        updateWeatherData(historyArray.reverse());
+        location.reload()      }
+    }
+    else{
+      let weatherDataArrayLocalStorage = [{
+        location: locationData,
+        data: data,
+        time: new Date()
+      }];
+      localStorage.setItem('weatherData', JSON.stringify(weatherDataArrayLocalStorage));
+      updateWeatherData(weatherDataArrayLocalStorage);
+      location.reload();
+    }
+  }
+  else{
+    let weatherDataArrayLocalStorage = [{
+      location: locationData,
+      data: data,
+      time: new Date()
+    }];
+    localStorage.setItem('weatherData', JSON.stringify(weatherDataArrayLocalStorage));
+    updateWeatherData(weatherDataArrayLocalStorage.reverse());
+    location.reload();
+  }
 }
 
 
 function loadData() {
+  console.log("loading data are load");
   const storedData = localStorage.getItem('weatherData'); 
   if (storedData) {
     const weatherData = JSON.parse(storedData);
-    updateWeatherData(weatherData.data);
-    
+    updateWeatherData(weatherData.reverse());
+  }
+  else{
+    console.log("No Data Found");
   }
 }
 loadData();
