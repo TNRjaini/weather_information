@@ -72,7 +72,7 @@ function saveData(locationData, data) {
         let weatherData = {
           location: locationData,
           data: data,
-          time: new Date()
+          time:  Date()
         };
         let historyArray = JSON.parse(storedData);
         historyArray.push(weatherData);
@@ -85,7 +85,7 @@ function saveData(locationData, data) {
         let weatherData = {
           location: locationData,
           data: data,
-          time: new Date()
+          time:  Date()
         };
         let historyArray = JSON.parse(storedData);
         console.log(historyArray);
@@ -98,7 +98,7 @@ function saveData(locationData, data) {
       let weatherDataArrayLocalStorage = [{
         location: locationData,
         data: data,
-        time: new Date()
+        time:  Date()
       }];
       localStorage.setItem('weatherData', JSON.stringify(weatherDataArrayLocalStorage));
       updateWeatherData(weatherDataArrayLocalStorage);
@@ -109,7 +109,7 @@ function saveData(locationData, data) {
     let weatherDataArrayLocalStorage = [{
       location: locationData,
       data: data,
-      time: new Date()
+      time:  Date()
     }];
     localStorage.setItem('weatherData', JSON.stringify(weatherDataArrayLocalStorage));
     updateWeatherData(weatherDataArrayLocalStorage.reverse());
